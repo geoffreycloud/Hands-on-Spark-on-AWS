@@ -1,4 +1,4 @@
-# Hands-on-12-Spark-on-AWS
+# Hands-on-Spark-on-AWS
 # Serverless Spark ETL Pipeline on AWS
 
 This project is a hands-on assignment demonstrating a fully automated, event-driven serverless data pipeline on AWS.
