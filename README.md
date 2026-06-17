@@ -166,3 +166,16 @@ To avoid any future charges (especially if you're on the Free Tier), be sure to 
 2.  Delete the `start_glue_job_trigger` Lambda function.
 3.  Delete the `process_reviews_job` Glue job.
 4.  Delete the `AWSGlueServiceRole-Reviews` IAM role.
+
+## Results
+
+#### ETL Jobs
+<img width="1523" height="672" alt="image" src="https://github.com/user-attachments/assets/ce443465-d78a-413c-8913-c2722a391642" />
+
+#### Processed bucket
+<img width="1620" height="572" alt="image" src="https://github.com/user-attachments/assets/c41d2d10-c32d-4e76-a89c-e99cef8dfc4b" />
+
+#### Athena Results
+<img width="1877" height="707" alt="image" src="https://github.com/user-attachments/assets/ff17761d-826f-4ead-ab30-d89f3c646892" />
+
+
