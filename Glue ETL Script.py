@@ -84,8 +84,58 @@ glueContext.write_dynamic_frame.from_options(
 
 # Write the spark queries for following:
 # 2. Date wise review count: his query calculates the total number of reviews submitted per day.
-# 3. Top 5 Most Active Customers: This query identifies your "power users" by finding the customers who have submitted the most reviews.
-# 4. Overall Rating Distribution: This query shows the count for each star rating (1-star, 2-star, etc.)
+df_datewise = spark.sql("""
+    SELECT 
+        review_date,
+        COUNT(*) AS total_reviews
+    FROM product_reviews
+    GROUP BY review_date
+    ORDER BY review_date
+""")
 
+datewise_frame = DynamicFrame.fromDF(df_datewise, glueContext, "datewise_df")
+glueContext.write_dynamic_frame.from_options(
+    frame=datewise_frame,
+    connection_type="s3",
+    connection_options={"path": s3_analytics_path + "datewise/"},
+    format="csv"
+)
+
+# 3. Top 5 Most Active Customers: This query identifies your "power users" by finding the customers who have submitted the most reviews.
+df_top_customers = spark.sql("""
+    SELECT 
+        customer_id,
+        COUNT(*) AS review_count
+    FROM product_reviews
+    GROUP BY customer_id
+    ORDER BY review_count DESC
+    LIMIT 5
+""")
+
+top_customers_frame = DynamicFrame.fromDF(df_top_customers, glueContext, "top_customers_df")
+glueContext.write_dynamic_frame.from_options(
+    frame=top_customers_frame,
+    connection_type="s3",
+    connection_options={"path": s3_analytics_path + "top_customers/"},
+    format="csv"
+)
+
+# 4. Overall Rating Distribution: This query shows the count for each star rating (1-star, 2-star, etc.)
+df_rating_dist = spark.sql("""
+    SELECT 
+        rating,
+        COUNT(*) AS rating_count
+    FROM product_reviews
+    GROUP BY rating
+    ORDER BY rating
+""")
+
+rating_dist_frame = DynamicFrame.fromDF(df_rating_dist, glueContext, "rating_dist_df")
+glueContext.write_dynamic_frame.from_options(
+    frame=rating_dist_frame,
+    connection_type="s3",
+    connection_options={"path": s3_analytics_path + "rating_distribution/"},
+    format="csv"
+)
 
 job.commit()
